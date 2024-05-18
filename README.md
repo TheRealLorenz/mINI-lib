@@ -1,4 +1,4 @@
-# mINI-lib
+# mINI-lib ![build-passing](https://github.com/TheRealLorenz/mINI-lib/actions/workflows/cmake-multi-platform.yml/badge.svg)
 
 mINI-lib is a dead simple library for INI file handling in C++.
 
