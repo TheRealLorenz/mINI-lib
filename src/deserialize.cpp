@@ -18,6 +18,10 @@ inline void ltrim(std::string& s) {
 
 namespace ini {
 
+void deserialize(const std::string& fileName, Deserializable& object) {
+    object.deserialize(deserialize(fileName));
+}
+
 Config deserialize(const std::string& fileName) {
     std::ifstream file;
     file.open(fileName, std::ios_base::in);

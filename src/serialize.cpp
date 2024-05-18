@@ -6,6 +6,10 @@
 
 namespace ini {
 
+void serialize(const std::string& fileName, const Serializable& object) {
+    serialize(fileName, object.serialize());
+}
+
 void serialize(const std::string& fileName, const Config& config) {
     std::ofstream file;
     file.open(fileName, std::ios_base::out | std::ios_base::trunc);
