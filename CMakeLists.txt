@@ -9,4 +9,5 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_library(mINI SHARED src/serialize.cpp src/deserialize.cpp)
 
+enable_testing()
 add_subdirectory(test)
