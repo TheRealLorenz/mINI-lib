@@ -1,3 +1,6 @@
+#ifndef _MINI_INI
+#define _MINI_INI
+
 #include <string>
 #include <unordered_map>
 
@@ -16,3 +19,5 @@ public:
 private:
     std::string fileName;
 };
+
+#endif  // _MINI_INI
