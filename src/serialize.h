@@ -5,6 +5,10 @@
 
 #include "Config.h"
 
+namespace ini {
+
 void serialize(const std::string& fileName, const Config& config);
+
+}  // namespace ini
 
 #endif  // _SERIALIZE_H_

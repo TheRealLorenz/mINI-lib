@@ -5,19 +5,19 @@
 #include "src/serialize.h"
 
 int main() {
-    Config config;
+    ini::Config config;
 
     for (int i = 0; i < 10; i++) {
-        Section section;
+        ini::Section section;
 
         section[std::to_string(i)] = std::to_string(i * i);
 
         config[std::string() + char(i + 65)] = section;
     }
 
-    serialize("prova.ini", config);
+    ini::serialize("prova.ini", config);
 
-    config = deserialize("prova.ini");
+    config = ini::deserialize("prova.ini");
 
     for (const auto& kv : config) {
         std::cout << "Section: " << kv.first << std::endl;

@@ -5,6 +5,10 @@
 
 #include "Config.h"
 
+namespace ini {
+
 Config deserialize(const std::string& fileName);
+
+}  // namespace ini
 
 #endif  // _DESERIALIZE_H_

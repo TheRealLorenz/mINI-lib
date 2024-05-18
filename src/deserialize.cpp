@@ -15,6 +15,8 @@ inline void ltrim(std::string& s) {
                                     [](char c) { return !std::isspace(c); }));
 }
 
+namespace ini {
+
 Config deserialize(const std::string& fileName) {
     std::ifstream file;
     file.open(fileName, std::ios_base::in);
@@ -59,3 +61,5 @@ Config deserialize(const std::string& fileName) {
     file.close();
     return config;
 }
+
+}  // namespace ini

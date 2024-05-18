@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 
+namespace ini {
+
 void serialize(const std::string& fileName, const Config& config) {
     std::ofstream file;
     file.open(fileName, std::ios_base::out | std::ios_base::trunc);
@@ -25,3 +27,5 @@ void serialize(const std::string& fileName, const Config& config) {
 
     file.close();
 }
+
+}  // namespace ini
