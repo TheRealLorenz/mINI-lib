@@ -1,9 +1,7 @@
-#include "INIFile.h"
+#include "deserialize.h"
 
 #include <fstream>
 #include <iostream>
-
-INIFile::INIFile(const std::string& fileName) : fileName(fileName) {}
 
 inline void rtrim(std::string& s) {
     s.erase(std::find_if(s.rbegin(), s.rend(),
@@ -17,10 +15,10 @@ inline void ltrim(std::string& s) {
                                     [](char c) { return !std::isspace(c); }));
 }
 
-std::unordered_map<std::string, INIFile::Section> INIFile::read() {
+Config deserialize(const std::string& fileName) {
     std::ifstream file;
     file.open(fileName, std::ios_base::in);
-    std::unordered_map<std::string, INIFile::Section> sections;
+    Config config;
 
     std::string buffer;
     std::getline(file, buffer);
@@ -33,7 +31,7 @@ std::unordered_map<std::string, INIFile::Section> INIFile::read() {
         if (buffer.size() < 3 || buffer[0] != '[' ||
             buffer[buffer.size() - 1] != ']') {
             std::cerr << "Cannot read: Invalid section name" << std::endl;
-            return sections;
+            return config;
         }
 
         std::string sectionName = buffer.substr(1, buffer.size() - 2);
@@ -46,7 +44,7 @@ std::unordered_map<std::string, INIFile::Section> INIFile::read() {
             if (equal == buffer.end() || equal == buffer.begin() ||
                 equal == buffer.end() - 1) {
                 std::cerr << "Cannot read: Invalid line" << std::endl;
-                return sections;
+                return config;
             }
 
             auto key = std::string(buffer.begin(), equal);
@@ -54,33 +52,10 @@ std::unordered_map<std::string, INIFile::Section> INIFile::read() {
             rtrim(key);
             ltrim(value);
 
-            sections[sectionName][key] = value;
+            config[sectionName][key] = value;
         }
     }
 
     file.close();
-    return sections;
-}
-
-void INIFile::write(
-    const std::unordered_map<std::string, INIFile::Section>& sections) {
-    std::ofstream file;
-    file.open(fileName, std::ios_base::out | std::ios_base::trunc);
-
-    for (const auto& kv : sections) {
-        if (kv.first.empty()) {
-            std::cerr << "Cannot write: Section name should not be empty"
-                      << std::endl;
-            return;
-        }
-        file << "[" << kv.first << "]\n";
-
-        for (const auto& inner_kv : kv.second) {
-            file << inner_kv.first << " = " << inner_kv.second << "\n";
-        }
-
-        file << "\n";
-    }
-
-    file.close();
+    return config;
 }

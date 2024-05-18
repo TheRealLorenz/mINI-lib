@@ -1,25 +1,25 @@
 #include <iostream>
-#include <unordered_map>
 
-#include "src/INIFile.h"
+#include "src/Config.h"
+#include "src/deserialize.h"
+#include "src/serialize.h"
 
 int main() {
-    INIFile file("prova.ini");
-    std::unordered_map<std::string, INIFile::Section> values;
+    Config config;
 
     for (int i = 0; i < 10; i++) {
-        INIFile::Section section;
+        Section section;
 
         section[std::to_string(i)] = std::to_string(i * i);
 
-        values[std::string() + char(i + 65)] = section;
+        config[std::string() + char(i + 65)] = section;
     }
 
-    file.write(values);
+    serialize("prova.ini", config);
 
-    values = file.read();
+    config = deserialize("prova.ini");
 
-    for (const auto& kv : values) {
+    for (const auto& kv : config) {
         std::cout << "Section: " << kv.first << std::endl;
 
         for (const auto& inner_kv : kv.second) {
