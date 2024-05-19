@@ -13,8 +13,9 @@ FetchContent_Declare(
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
 
 # Now simply link against gtest or gtest_main as needed. Eg
 add_executable(runAllTests runAllTests.cpp testDeserialize.cpp)
 target_link_libraries(runAllTests gtest_main mINI_static)
-add_test(NAME mINI-lib_test COMMAND runAllTests)
+gtest_discover_tests(runAllTests)
