@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Required to generate .lib file
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+include_directories(include)
 add_library(mINI SHARED src/serialize.cpp src/deserialize.cpp)
 
 add_executable(mINI-test main.cpp)

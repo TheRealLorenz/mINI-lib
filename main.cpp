@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "src/Config.h"
-#include "src/deserialize.h"
-#include "src/serialize.h"
+#include "Config.h"
+#include "deserialize.h"
+#include "serialize.h"
 
 int main() {
     ini::Config config;
