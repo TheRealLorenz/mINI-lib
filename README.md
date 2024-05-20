@@ -34,4 +34,13 @@ The `build` folder will then contain a **static** and **shared** version of the 
 
 ## Testing
 
-TODO: now the code simply has a mINI-test target which performs a very simple test 
+Tests are built with the `runAllTests` target, the [googletest](https://github.com/google/googletest) library is fetched automatically at configure-time by the [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) directives.
+
+### Running the tests
+
+- **Directly**: run the `runAllTests` target, located in ./<build-folder>/test/ .
+
+- **Using ctest**: from the root directory.
+```bash
+ctest --test-dir <build-folder>
+```
