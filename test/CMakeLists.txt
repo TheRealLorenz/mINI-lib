@@ -3,6 +3,7 @@ project(mINI-lib-test)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(BUILD_GMOCK OFF)
 
 include(FetchContent)
 FetchContent_Declare(
