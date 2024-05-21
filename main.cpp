@@ -1,9 +1,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "Config.h"
-#include "deserialize.h"
-#include "serialize.h"
+#include "ini/Config.h"
+#include "ini/deserialize.h"
+#include "ini/serialize.h"
 
 int main() {
     ini::Config config;
