@@ -17,6 +17,6 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(runAllTests runAllTests.cpp testDeserialize.cpp)
+add_executable(runAllTests runAllTests.cpp testDeserialize.cpp testSerialize.cpp)
 target_link_libraries(runAllTests gtest_main mINI_static)
 gtest_discover_tests(runAllTests)
