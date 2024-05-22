@@ -1,6 +1,6 @@
 # mINI-lib ![build-passing](https://github.com/TheRealLorenz/mINI-lib/actions/workflows/cmake-multi-platform.yml/badge.svg)
 
-mINI-lib is a dead simple library for INI file handling in C++.
+mINI-lib is a dead simple library for INI format handling in C++.
 
 ## Glossary
 
@@ -13,8 +13,10 @@ This types are simple `typdef`s which reduce code verbosity.
 
 There are two main functions:
 
-- `void ini::serialize(std::string fileName, const ini::Config& config)`: serializes a Config objet to `fileName`.
-- `ini::Config ini::deserialize(std::string fileName)`: deserializes a Config object from `fileName`.
+- `void ini::serialize(std::basic_ostream<char>& output, const ini::Config& config)`: serializes a Config objet to the given output stream.
+- `ini::Config ini::deserialize(std::basic_istream<char>& input)`: deserializes a Config object to the given input stream.
+
+Using `std::basic_istream<char>` and `std::basic_ostream<char>` Gives more flexibility, as the (de)serialization may occur (from)to `std::fstream`s and `std::stringstream`s, for example.
 
 ## Exceptions
 
