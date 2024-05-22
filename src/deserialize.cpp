@@ -1,7 +1,6 @@
 #include "deserialize.h"
 
 #include <algorithm>
-#include <fstream>
 #include <iostream>
 
 inline void rtrim(std::string& s) {
@@ -18,16 +17,14 @@ inline void ltrim(std::string& s) {
 
 namespace ini {
 
-Config deserialize(const std::string& fileName) {
-    std::ifstream file;
-    file.open(fileName, std::ios_base::in);
+Config deserialize(std::basic_istream<char>& input) {
     Config config;
-
     std::string buffer;
-    std::getline(file, buffer);
-    while (file) {
+
+    std::getline(input, buffer);
+    while (input) {
         if (!buffer.size() || buffer[0] == ';') {
-            std::getline(file, buffer);
+            std::getline(input, buffer);
             continue;
         }
 
@@ -39,7 +36,7 @@ Config deserialize(const std::string& fileName) {
 
         std::string sectionName = buffer.substr(1, buffer.size() - 2);
 
-        while (std::getline(file, buffer)) {
+        while (std::getline(input, buffer)) {
             if (!buffer.size()) continue;
             if (buffer[0] == '[') break;
             auto equal = std::find(buffer.begin(), buffer.end(), '=');
@@ -59,7 +56,6 @@ Config deserialize(const std::string& fileName) {
         }
     }
 
-    file.close();
     return config;
 }
 
