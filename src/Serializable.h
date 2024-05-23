@@ -8,6 +8,7 @@ namespace ini {
 class Serializable {
 public:
     virtual Config serialize() const = 0;
+    virtual ~Serializable() {}
 };
 
 }  // namespace ini
