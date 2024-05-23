@@ -1,13 +1,13 @@
 #ifndef _DESERIALIZE_H_
 #define _DESERIALIZE_H_
 
-#include <string>
+#include <istream>
 
 #include "Config.h"
 
 namespace ini {
 
-Config deserialize(const std::string& fileName);
+Config deserialize(std::basic_istream<char>& input);
 
 }  // namespace ini
 
