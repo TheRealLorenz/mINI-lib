@@ -20,7 +20,7 @@ Using `std::basic_istream<char>` and `std::basic_ostream<char>` Gives more flexi
 
 ## Exceptions
 
-TODO: now the code just prints to stderr
+`ini::serialize` and `ini::deserialize` may throw `ini::Exception`, which is a subtype of [std::runtime_error](https://en.cppreference.com/w/cpp/error/runtime_error)
 
 ## Building from source
 

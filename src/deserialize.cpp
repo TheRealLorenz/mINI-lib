@@ -1,7 +1,8 @@
 #include "ini/deserialize.h"
 
 #include <algorithm>
-#include <iostream>
+
+#include "ini/Exception.h"
 
 inline void rtrim(std::string& s) {
     s.erase(std::find_if(s.rbegin(), s.rend(),
@@ -30,8 +31,9 @@ Config deserialize(std::basic_istream<char>& input) {
 
         if (buffer.size() < 3 || buffer[0] != '[' ||
             buffer[buffer.size() - 1] != ']') {
-            std::cerr << "Cannot read: Invalid section name" << std::endl;
-            return config;
+            throw new ini::Exception(
+                std::string("Couldn't deserialize: Invalid section header '") +
+                buffer + "'");
         }
 
         std::string sectionName = buffer.substr(1, buffer.size() - 2);
@@ -43,8 +45,9 @@ Config deserialize(std::basic_istream<char>& input) {
 
             if (equal == buffer.end() || equal == buffer.begin() ||
                 equal == buffer.end() - 1) {
-                std::cerr << "Cannot read: Invalid line" << std::endl;
-                return config;
+                throw new ini::Exception(
+                    std::string("Couldn't deserialize: Invalid line '") +
+                    buffer + "'");
             }
 
             auto key = std::string(buffer.begin(), equal);
