@@ -4,6 +4,6 @@
 namespace utilstr {
 
 std::vector<std::string> split(const std::string& s,
-                               const std::string& pattern);
+                               const std::string& pattern = " ");
 
 };
