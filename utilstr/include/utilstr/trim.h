@@ -3,7 +3,9 @@
 
 namespace utilstr {
 
-void rtrim(std::string& s, const std::vector<char>& trimChars = {' '});
-void ltrim(std::string& s, const std::vector<char>& trimChars = {' '});
+std::string rtrim(const std::string& s,
+                  const std::vector<char>& trimChars = {' '});
+std::string ltrim(const std::string& s,
+                  const std::vector<char>& trimChars = {' '});
 
 };  // namespace utilstr

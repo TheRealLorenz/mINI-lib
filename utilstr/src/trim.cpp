@@ -1,31 +1,35 @@
 #include "utilstr/trim.h"
 
 #include <algorithm>
+#include <string>
 #include <vector>
 
 namespace utilstr {
 
-void rtrim(std::string& s, const std::vector<char>& trimChars) {
+std::string rtrim(const std::string& s, const std::vector<char>& trimChars) {
     auto isTrimChar = [trimChars](const char c) {
         return std::find(trimChars.begin(), trimChars.end(), c) !=
                trimChars.end();
     };
 
-    s.erase(std::find_if(s.rbegin(), s.rend(),
-                         [isTrimChar](char c) { return !isTrimChar(c); })
-                .base(),
-            s.end());
+    auto lastLegalChar =
+        std::find_if(s.rbegin(), s.rend(), [isTrimChar](char c) {
+            return !isTrimChar(c);
+        }).base();
+
+    return std::string(s.begin(), lastLegalChar);
 }
 
-void ltrim(std::string& s, const std::vector<char>& trimChars) {
+std::string ltrim(const std::string& s, const std::vector<char>& trimChars) {
     auto isTrimChar = [trimChars](const char c) {
         return std::find(trimChars.begin(), trimChars.end(), c) !=
                trimChars.end();
     };
 
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [isTrimChar](char c) {
-                return !isTrimChar(c);
-            }));
+    auto firstLegalChar = std::find_if(
+        s.begin(), s.end(), [isTrimChar](char c) { return !isTrimChar(c); });
+
+    return std::string(firstLegalChar, s.end());
 }
 
 };  // namespace utilstr
