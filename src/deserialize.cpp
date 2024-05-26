@@ -2,19 +2,8 @@
 
 #include <algorithm>
 
+#include "../utilstr/include/trim.h"
 #include "ini/Exception.h"
-
-inline void rtrim(std::string& s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(),
-                         [](char c) { return !std::isspace(c); })
-                .base(),
-            s.end());
-}
-
-inline void ltrim(std::string& s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-                                    [](char c) { return !std::isspace(c); }));
-}
 
 namespace ini {
 
