@@ -10,11 +10,11 @@ TEST(serialize, serializeFile) {
     ini::Config config;
 
     for (int i = 0; i < 10; i++) {
-        ini::Section section;
+        ini::Options options;
 
-        section[std::to_string(i)] = std::to_string(i * i);
+        options[std::to_string(i)] = std::to_string(i * i);
 
-        config[std::string() + char(i + 65)] = section;
+        config[std::string() + char(i + 65)] = options;
     }
     std::stringstream output;
     ini::serialize(output, config);

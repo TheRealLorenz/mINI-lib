@@ -3,11 +3,15 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 namespace ini {
 
-typedef std::unordered_map<std::string, std::string> Section;
-typedef std::unordered_map<std::string, Section> Config;
+typedef std::pair<std::string, std::string> Option;
+typedef std::unordered_map<Option::first_type, Option::second_type> Options;
+
+typedef std::pair<std::string, Options> Section;
+typedef std::unordered_map<Section::first_type, Section::second_type> Config;
 
 }  // namespace ini
 
