@@ -9,7 +9,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_subdirectory(utilstr)
 
-include_directories(include)
+include_directories(include utilstr/include)
 add_library(mINI SHARED src/serialize.cpp src/deserialize.cpp)
 target_link_libraries(mINI utilstr)
 

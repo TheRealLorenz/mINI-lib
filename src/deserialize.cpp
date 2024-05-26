@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include "../utilstr/include/trim.h"
 #include "ini/Exception.h"
+#include "utilstr/trim.h"
 
 namespace ini {
 
@@ -41,8 +41,8 @@ Config deserialize(std::basic_istream<char>& input) {
 
             auto key = std::string(buffer.begin(), equal);
             auto value = std::string(equal + 1, buffer.end());
-            rtrim(key);
-            ltrim(value);
+            utilstr::rtrim(key);
+            utilstr::ltrim(value);
 
             config[sectionName][key] = value;
         }
