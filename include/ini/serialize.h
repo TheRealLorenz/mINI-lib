@@ -1,13 +1,13 @@
 #ifndef _SERIALIZE_H_
 #define _SERIALIZE_H_
 
-#include <string>
+#include <ostream>
 
 #include "Config.h"
 
 namespace ini {
 
-void serialize(const std::string& fileName, const Config& config);
+void serialize(std::basic_ostream<char>& output, const Config& config);
 
 }  // namespace ini
 

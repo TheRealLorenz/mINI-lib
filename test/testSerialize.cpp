@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "../src/serialize.h"
+#include "ini/serialize.h"
 
 std::vector<std::string> split(const std::string& s,
                                const std::string& pattern) {
@@ -36,7 +36,10 @@ TEST(serialize, serializeFile) {
 
         config[std::string() + char(i + 65)] = section;
     }
-    ini::serialize("prova.ini", config);
+    std::ofstream outFile;
+    outFile.open("prova.ini", std::ios_base::out | std::ios_base::trunc);
+    ini::serialize(outFile, config);
+    outFile.close();
 
     std::ifstream file;
     file.open("prova.ini", std::ios_base::in);

@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#include "../src/deserialize.h"
+#include "ini/deserialize.h"
 
 TEST(deserialize, deserializeFile) {
     std::ofstream file;
@@ -16,7 +16,10 @@ Param 2 = Value 2\n\
 ";
     file.close();
 
-    ini::Config config = ini::deserialize("prova.ini");
+    std::ifstream inFile;
+    inFile.open("prova.ini", std::ios_base::in);
+    ini::Config config = ini::deserialize(inFile);
+    inFile.close();
 
     ASSERT_NE(config.find("Section 1"), config.end());
     auto section1 = config["Section 1"];
