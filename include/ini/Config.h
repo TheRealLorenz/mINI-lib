@@ -5,13 +5,17 @@
 #include <unordered_map>
 #include <utility>
 
+template <typename T>
+using pair_map =
+    std::unordered_map<typename T::first_type, typename T::second_type>;
+
 namespace ini {
 
 typedef std::pair<std::string, std::string> Option;
-typedef std::unordered_map<Option::first_type, Option::second_type> Options;
+typedef pair_map<Option> Options;
 
 typedef std::pair<std::string, Options> Section;
-typedef std::unordered_map<Section::first_type, Section::second_type> Config;
+typedef pair_map<Section> Config;
 
 }  // namespace ini
 
