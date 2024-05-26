@@ -27,7 +27,7 @@ TEST(serialize, serializeFile) {
     buffer << file.rdbuf();
     std::string serialized = buffer.str();
 
-    auto sections = split(serialized, "\n\n");
+    auto sections = utilstr::split(serialized, "\n\n");
     for (const auto& section : sections) {
         ASSERT_EQ(section[0], '[');
         auto closingBracket = std::find(section.begin(), section.end(), ']');
