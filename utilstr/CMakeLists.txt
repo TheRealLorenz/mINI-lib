@@ -8,4 +8,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 include_directories(include)
-add_library(utilstr STATIC src/trim.cpp)
+add_library(utilstr STATIC src/trim.cpp src/split.cpp)
