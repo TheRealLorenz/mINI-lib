@@ -39,10 +39,8 @@ Config deserialize(std::basic_istream<char>& input) {
                     buffer + "'");
             }
 
-            auto key = std::string(buffer.begin(), equal);
-            auto value = std::string(equal + 1, buffer.end());
-            utilstr::rtrim(key);
-            utilstr::ltrim(value);
+            auto key = utilstr::rtrim(std::string(buffer.begin(), equal));
+            auto value = utilstr::ltrim(std::string(equal + 1, buffer.end()));
 
             config[sectionName][key] = value;
         }
