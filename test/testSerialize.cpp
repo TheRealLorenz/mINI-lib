@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
-#include <fstream>
+#include <sstream>
 
 #include "ini/serialize.h"
 #include "utilstr/split.h"
@@ -16,16 +16,9 @@ TEST(serialize, serializeFile) {
 
         config[std::string() + char(i + 65)] = section;
     }
-    std::ofstream outFile;
-    outFile.open("prova.ini", std::ios_base::out | std::ios_base::trunc);
-    ini::serialize(outFile, config);
-    outFile.close();
-
-    std::ifstream file;
-    file.open("prova.ini", std::ios_base::in);
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    std::string serialized = buffer.str();
+    std::stringstream output;
+    ini::serialize(output, config);
+    std::string serialized = output.str();
 
     auto sections = utilstr::split(serialized, "\n\n");
     for (const auto& section : sections) {

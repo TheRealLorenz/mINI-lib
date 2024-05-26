@@ -1,25 +1,19 @@
 #include <gtest/gtest.h>
 
-#include <fstream>
+#include <sstream>
 
 #include "ini/deserialize.h"
 
 TEST(deserialize, deserializeFile) {
-    std::ofstream file;
-    file.open("prova.ini", std::ios_base::out | std::ios_base::trunc);
-    file << "\
+    std::stringstream input;
+    input << "\
 [Section 1]\n\
 Param 1 = Value 1\n\
 \n\
 [Section 2]\n\
 Param 2 = Value 2\n\
 ";
-    file.close();
-
-    std::ifstream inFile;
-    inFile.open("prova.ini", std::ios_base::in);
-    ini::Config config = ini::deserialize(inFile);
-    inFile.close();
+    ini::Config config = ini::deserialize(input);
 
     ASSERT_NE(config.find("Section 1"), config.end());
     auto section1 = config["Section 1"];
