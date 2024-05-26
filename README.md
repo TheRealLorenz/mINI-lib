@@ -40,7 +40,7 @@ Tests are built with the `runAllTests` target, the [googletest](https://github.c
 
 ### Running the tests
 
-- **Directly**: run the `runAllTests` target, located in ./<build-folder>/test/ .
+- **Directly**: run the `runAllTests` target, located in `./<build-folder>/test/` .
 
 - **Using ctest**: from the root directory.
 ```bash
