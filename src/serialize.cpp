@@ -1,6 +1,6 @@
 #include "ini/serialize.h"
 
-#include "ini/Exception.h"
+#include "ini/SerializeError.h"
 
 namespace ini {
 
@@ -11,7 +11,7 @@ void serializeOption(std::basic_ostream<char>& output, const Option& option) {
 void serializeSection(std::basic_ostream<char>& output,
                       const Section& section) {
     if (section.first.empty()) {
-        throw new ini::Exception(
+        throw new ini::SerializeError(
             "Couldn't serialize: Section name should not be empty");
     }
     output << "[" << section.first << "]\n";

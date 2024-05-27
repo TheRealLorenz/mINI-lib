@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "ini/Exception.h"
+#include "ini/DeserializeError.h"
 #include "utilstr/trim.h"
 
 namespace ini {
@@ -20,9 +20,8 @@ Config deserialize(std::basic_istream<char>& input) {
 
         if (buffer.size() < 3 || buffer[0] != '[' ||
             buffer[buffer.size() - 1] != ']') {
-            throw new ini::Exception(
-                std::string("Couldn't deserialize: Invalid section header '") +
-                buffer + "'");
+            throw new ini::DeserializeError(
+                std::string("Invalid section header '") + buffer + "'");
         }
 
         std::string sectionName = buffer.substr(1, buffer.size() - 2);
@@ -34,9 +33,8 @@ Config deserialize(std::basic_istream<char>& input) {
 
             if (equal == buffer.end() || equal == buffer.begin() ||
                 equal == buffer.end() - 1) {
-                throw new ini::Exception(
-                    std::string("Couldn't deserialize: Invalid line '") +
-                    buffer + "'");
+                throw new ini::DeserializeError(std::string("Invalid line '") +
+                                                buffer + "'");
             }
 
             auto key = utilstr::rtrim(std::string(buffer.begin(), equal));
