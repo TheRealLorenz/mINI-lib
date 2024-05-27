@@ -11,7 +11,7 @@ void serializeOption(std::basic_ostream<char>& output, const Option& option) {
 void serializeSection(std::basic_ostream<char>& output,
                       const Section& section) {
     if (section.first.empty()) {
-        throw new ini::SerializeError(
+        throw ini::SerializeError(
             "Couldn't serialize: Section name should not be empty");
     }
     output << "[" << section.first << "]\n";
