@@ -3,8 +3,30 @@
 #include <algorithm>
 #include <sstream>
 
+#include "ini/SerializeError.h"
 #include "ini/serialize.h"
 #include "utilstr/split.h"
+
+TEST(serializeOption, serializeFullOption) {
+    std::stringstream output;
+    ini::serializeOption(output, {"FOO", "BAR"});
+
+    ASSERT_EQ(output.str(), "FOO = BAR\n");
+}
+
+TEST(serializeOption, serializeEmptyOption) {
+    std::stringstream output;
+    ini::serializeOption(output, {"FOO", ""});
+
+    ASSERT_EQ(output.str(), "FOO =\n");
+}
+
+TEST(serializeOption, serializeInvalidOption) {
+    std::stringstream output;
+
+    ASSERT_THROW(ini::serializeOption(output, {"", "BAR"}),
+                 ini::SerializeError);
+}
 
 TEST(serialize, serializeFile) {
     ini::Config config;

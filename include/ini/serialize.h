@@ -8,6 +8,7 @@
 namespace ini {
 
 void serialize(std::basic_ostream<char>& output, const Config& config);
+void serializeOption(std::basic_ostream<char>& output, const Option& option);
 
 }  // namespace ini
 
