@@ -3,11 +3,19 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
+
+template <typename T>
+using pair_map =
+    std::unordered_map<typename T::first_type, typename T::second_type>;
 
 namespace ini {
 
-typedef std::unordered_map<std::string, std::string> Section;
-typedef std::unordered_map<std::string, Section> Config;
+typedef std::pair<std::string, std::string> Option;
+typedef pair_map<Option> Options;
+
+typedef std::pair<std::string, Options> Section;
+typedef pair_map<Section> Config;
 
 }  // namespace ini
 

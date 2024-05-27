@@ -1,22 +1,31 @@
 #include "ini/serialize.h"
 
-#include "ini/Exception.h"
+#include "ini/SerializeError.h"
 
 namespace ini {
 
+void serializeOption(std::basic_ostream<char>& output, const Option& option) {
+    output << option.first << " = " << option.second << "\n";
+}
+
+void serializeSection(std::basic_ostream<char>& output,
+                      const Section& section) {
+    if (section.first.empty()) {
+        throw ini::SerializeError(
+            "Couldn't serialize: Section name should not be empty");
+    }
+    output << "[" << section.first << "]\n";
+
+    for (const auto& option : section.second) {
+        serializeOption(output, option);
+    }
+
+    output << "\n";
+}
+
 void serialize(std::basic_ostream<char>& output, const Config& config) {
-    for (const auto& kv : config) {
-        if (kv.first.empty()) {
-            throw new ini::Exception(
-                "Couldn't serialize: Section name should not be empty");
-        }
-        output << "[" << kv.first << "]\n";
-
-        for (const auto& inner_kv : kv.second) {
-            output << inner_kv.first << " = " << inner_kv.second << "\n";
-        }
-
-        output << "\n";
+    for (const auto& section : config) {
+        serializeSection(output, section);
     }
 }
 
