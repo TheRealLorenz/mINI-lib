@@ -1,13 +1,12 @@
 #ifndef _MINI_FILE_H_
 #define _MINI_FILE_H_
 
+#include <map>
 #include <string>
-#include <unordered_map>
 #include <utility>
 
 template <typename T>
-using pair_map =
-    std::unordered_map<typename T::first_type, typename T::second_type>;
+using pair_map = std::map<typename T::first_type, typename T::second_type>;
 
 namespace ini {
 
