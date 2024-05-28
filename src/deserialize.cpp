@@ -34,14 +34,14 @@ Option deserializeOption(std::basic_istream<char>& input) {
     std::string line = getLine(input);
 
     auto equal = std::find(line.begin(), line.end(), '=');
+    auto key = utilstr::rtrim(std::string(line.begin(), equal));
 
-    if (equal == line.end() || equal == line.begin()) {
+    if (equal == line.end() || equal == line.begin() || key.empty()) {
         putbackLine(input, line);
         throw ini::DeserializeError(std::string("Invalid option '") + line +
                                     "'");
     }
 
-    auto key = utilstr::rtrim(std::string(line.begin(), equal));
     auto value = utilstr::ltrim(std::string(equal + 1, line.end()));
 
     return {key, value};

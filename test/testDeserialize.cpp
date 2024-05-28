@@ -2,8 +2,46 @@
 
 #include <sstream>
 
+#include "ini/DeserializeError.h"
+#include "ini/EOFError.h"
 #include "ini/deserialize.h"
 
+TEST(deserializeOption, deserializeFullOption) {
+    std::stringstream input;
+    input << "FOO = BAR";
+    ini::Option expected{"FOO", "BAR"};
+
+    ASSERT_EQ(ini::deserializeOption(input), expected);
+}
+
+TEST(deserializeOption, deserializeEmptyOption) {
+    std::stringstream input;
+    input << "FOO =";
+    ini::Option expected{"FOO", ""};
+
+    ASSERT_EQ(ini::deserializeOption(input), expected);
+}
+
+TEST(deserializeOption, deserializeInvalidOption) {
+    std::stringstream input;
+
+    input << "= BAR\n";
+    ASSERT_THROW(ini::deserializeOption(input), ini::DeserializeError);
+    ASSERT_EQ(input.str(), "= BAR\n");
+
+    input.str("");
+    input << " = BAR\n";
+    ASSERT_THROW(ini::deserializeOption(input), ini::DeserializeError);
+    ASSERT_EQ(input.str(), " = BAR\n");
+
+    input.str("");
+    input << "FOOBAR\n";
+    ASSERT_THROW(ini::deserializeOption(input), ini::DeserializeError);
+    ASSERT_EQ(input.str(), "FOOBAR\n");
+
+    input.str("");
+    ASSERT_THROW(ini::deserializeOption(input), ini::EOFError);
+}
 TEST(deserialize, deserializeFile) {
     std::stringstream input;
     input << "\
