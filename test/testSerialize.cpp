@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <algorithm>
 #include <sstream>
 
 #include "ini/SerializeError.h"
@@ -35,7 +34,7 @@ TEST(serializeSection, serializeFullSection) {
     options.insert({"BAZ", ""});
     ini::serializeSection(output, {"section1", options});
 
-    ASSERT_EQ(output.str(), "[section1]\nFOO = BAR\nBAZ =\n\n");
+    ASSERT_EQ(output.str(), "[section1]\nBAZ =\nFOO = BAR\n\n");
 }
 
 TEST(serializeSection, serializeEmptySection) {
@@ -57,7 +56,7 @@ TEST(serializeSection, serializeInvalidSection) {
 TEST(serialize, serializeFile) {
     ini::Config config;
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 5; i++) {
         ini::Options options;
 
         options[std::to_string(i)] = std::to_string(i * i);
@@ -66,24 +65,22 @@ TEST(serialize, serializeFile) {
     }
     std::stringstream output;
     ini::serialize(output, config);
-    std::string serialized = output.str();
 
-    auto sections = utilstr::split(serialized, "\n\n");
-    for (const auto& section : sections) {
-        ASSERT_EQ(section[0], '[');
-        auto closingBracket = std::find(section.begin(), section.end(), ']');
-        ASSERT_NE(closingBracket, section.end());
+    ASSERT_EQ(output.str(),
+              R"([A]
+0 = 0
 
-        std::string sectionName =
-            std::string(section.begin() + 1, closingBracket);
-        ASSERT_EQ(sectionName.size(), 1);
+[B]
+1 = 1
 
-        int sectionValue = (int)sectionName[0] - 65;
-        auto newLine = std::find(section.begin(), section.end(), '\n');
-        ASSERT_NE(newLine, section.end());
+[C]
+2 = 4
 
-        ASSERT_EQ(std::string(newLine + 1, section.end()),
-                  std::to_string(sectionValue) + " = " +
-                      std::to_string(sectionValue * sectionValue));
-    }
+[D]
+3 = 9
+
+[E]
+4 = 16
+
+)");
 }
