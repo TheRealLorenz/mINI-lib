@@ -5,9 +5,9 @@ mINI-lib is a dead simple library for INI format handling in C++.
 ## Glossary
 
 - A `ini::Option` is a `std::pair<std::string, std::string>`, represents a key-value pair in a section.
-- A `ini::Options` is a [unorderd_map](https://en.cppreference.com/w/cpp/container/unordered_map) where its pairs are `ini::Option`s.
+- A `ini::Options` is a [map](https://en.cppreference.com/w/cpp/container/map) where its pairs are `ini::Option`s.
 - A `ini::Section` is a `std::pair<std::string, Options>`, represents a Section comprised of a name and its corresponding options.
-- A `ini::Config` is  a [unorderd_map](https://en.cppreference.com/w/cpp/container/unordered_map) where its pairs are `ini::Section`s.
+- A `ini::Config` is  a [map](https://en.cppreference.com/w/cpp/container/map) where its pairs are `ini::Section`s.
 
 This types are simple `typdef`s which reduce code verbosity.
 
