@@ -28,6 +28,32 @@ TEST(serializeOption, serializeInvalidOption) {
                  ini::SerializeError);
 }
 
+TEST(serializeSection, serializeFullSection) {
+    std::stringstream output;
+    ini::Options options;
+    options.insert({"FOO", "BAR"});
+    options.insert({"BAZ", ""});
+    ini::serializeSection(output, {"section1", options});
+
+    ASSERT_EQ(output.str(), "[section1]\nFOO = BAR\nBAZ =\n\n");
+}
+
+TEST(serializeSection, serializeEmptySection) {
+    std::stringstream output;
+    ini::Options options;
+    ini::serializeSection(output, {"section1", options});
+
+    ASSERT_EQ(output.str(), "[section1]\n\n");
+}
+
+TEST(serializeSection, serializeInvalidSection) {
+    std::stringstream output;
+    ini::Options options;
+
+    ASSERT_THROW(ini::serializeSection(output, {"", options}),
+                 ini::SerializeError);
+}
+
 TEST(serialize, serializeFile) {
     ini::Config config;
 
