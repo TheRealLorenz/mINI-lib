@@ -8,6 +8,7 @@
 namespace ini {
 
 Config deserialize(std::basic_istream<char>& input);
+Section deserializeSection(std::basic_istream<char>& input);
 Option deserializeOption(std::basic_istream<char>& input);
 
 }  // namespace ini

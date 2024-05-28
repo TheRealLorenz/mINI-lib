@@ -42,6 +42,39 @@ TEST(deserializeOption, deserializeInvalidOption) {
     input.str("");
     ASSERT_THROW(ini::deserializeOption(input), ini::EOFError);
 }
+
+TEST(deserializeSection, deserializeFullSection) {
+    std::stringstream input;
+    input << "[Section 1]\nFOO = BAR\nBAZ=";
+
+    ini::Options options;
+    options.insert({"FOO", "BAR"});
+    options.insert({"BAZ", ""});
+    ini::Section expected{"Section 1", options};
+
+    ASSERT_EQ(ini::deserializeSection(input), expected);
+}
+
+TEST(deserializeSection, deserializeEmptySection) {
+    std::stringstream input;
+    input << "[Section 1]";
+
+    ini::Options options;
+    ini::Section expected{"Section 1", options};
+
+    ASSERT_EQ(ini::deserializeSection(input), expected);
+}
+
+TEST(deserializeSection, deserializeInvalidSection) {
+    std::stringstream input;
+
+    input << "[Section 1";
+    ASSERT_THROW(ini::deserializeSection(input), ini::DeserializeError);
+
+    input.str("");
+    ASSERT_THROW(ini::deserializeSection(input), ini::EOFError);
+}
+
 TEST(deserialize, deserializeFile) {
     std::stringstream input;
     input << "\
