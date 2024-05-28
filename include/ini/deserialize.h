@@ -11,6 +11,12 @@ Config deserialize(std::basic_istream<char>& input);
 Section deserializeSection(std::basic_istream<char>& input);
 Option deserializeOption(std::basic_istream<char>& input);
 
+namespace stream {
+
+std::string getLine(std::basic_istream<char>& input);
+
+};  // namespace stream
+
 }  // namespace ini
 
 #endif  // _DESERIALIZE_H_
