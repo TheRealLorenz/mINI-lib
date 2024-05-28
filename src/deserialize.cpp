@@ -35,8 +35,7 @@ Option deserializeOption(std::basic_istream<char>& input) {
 
     auto equal = std::find(line.begin(), line.end(), '=');
 
-    if (equal == line.end() || equal == line.begin() ||
-        equal == line.end() - 1) {
+    if (equal == line.end() || equal == line.begin()) {
         putbackLine(input, line);
         throw ini::DeserializeError(std::string("Invalid option '") + line +
                                     "'");
