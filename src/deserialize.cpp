@@ -30,7 +30,7 @@ void putbackLine(std::basic_istream<char>& input, const std::string& line) {
                   [&input](const char c) { input.putback(c); });
 }
 
-Option parseOption(std::basic_istream<char>& input) {
+Option deserializeOption(std::basic_istream<char>& input) {
     std::string line = getLine(input);
 
     auto equal = std::find(line.begin(), line.end(), '=');
@@ -48,7 +48,7 @@ Option parseOption(std::basic_istream<char>& input) {
     return {key, value};
 }
 
-Section parseSection(std::basic_istream<char>& input) {
+Section deserializeSection(std::basic_istream<char>& input) {
     std::string line = getLine(input);
 
     if (line.size() < 3 || line[0] != '[' || line[line.size() - 1] != ']') {
@@ -61,7 +61,7 @@ Section parseSection(std::basic_istream<char>& input) {
 
     while (true) {
         try {
-            Option option = parseOption(input);
+            Option option = deserializeOption(input);
             options.insert(option);
         } catch (const DeserializeError& e) {
             break;
@@ -76,7 +76,7 @@ Config deserialize(std::basic_istream<char>& input) {
 
     while (true) {
         try {
-            Section section = parseSection(input);
+            Section section = deserializeSection(input);
             config.insert(section);
         } catch (const EOFError& e) {
             break;
