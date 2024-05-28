@@ -10,6 +10,8 @@
 
 namespace ini {
 
+namespace stream {
+
 std::string getLine(std::basic_istream<char>& input) {
     std::string buffer;
     std::getline(input, buffer);
@@ -30,14 +32,16 @@ void putbackLine(std::basic_istream<char>& input, const std::string& line) {
                   [&input](const char c) { input.putback(c); });
 }
 
+};  // namespace stream
+
 Option deserializeOption(std::basic_istream<char>& input) {
-    std::string line = getLine(input);
+    std::string line = stream::getLine(input);
 
     auto equal = std::find(line.begin(), line.end(), '=');
     auto key = utilstr::rtrim(std::string(line.begin(), equal));
 
     if (equal == line.end() || equal == line.begin() || key.empty()) {
-        putbackLine(input, line);
+        stream::putbackLine(input, line);
         throw ini::DeserializeError(std::string("Invalid option '") + line +
                                     "'");
     }
@@ -48,7 +52,7 @@ Option deserializeOption(std::basic_istream<char>& input) {
 }
 
 Section deserializeSection(std::basic_istream<char>& input) {
-    std::string line = getLine(input);
+    std::string line = stream::getLine(input);
 
     if (line.size() < 3 || line[0] != '[' || line[line.size() - 1] != ']') {
         throw ini::DeserializeError(std::string("Invalid section header '") +
