@@ -4,6 +4,7 @@
 #include <string>
 
 #include "ini/Config.h"
+#include "ini/Deserializable.h"
 #include "ini/DeserializeError.h"
 #include "ini/EOFError.h"
 #include "utilstr/trim.h"
@@ -87,6 +88,12 @@ Config deserialize(std::basic_istream<char>& input) {
     }
 
     return config;
+}
+
+void deserialize(std::basic_istream<char>& input, Deserializable& object) {
+    Config config = deserialize(input);
+
+    object.deserialize(config);
 }
 
 }  // namespace ini

@@ -38,4 +38,8 @@ void serialize(std::basic_ostream<char>& output, const Config& config) {
     }
 }
 
+void serialize(std::basic_ostream<char>& output, const Serializable& object) {
+    serialize(output, object.serialize());
+}
+
 }  // namespace ini
