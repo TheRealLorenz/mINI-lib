@@ -1,35 +1,45 @@
-#include "serialize.h"
+#include "ini/serialize.h"
 
-#include <fstream>
-#include <iostream>
-#include <string>
+#include "ini/SerializeError.h"
 
 namespace ini {
 
-void serialize(const std::string& fileName, const Serializable& object) {
-    serialize(fileName, object.serialize());
-}
-
-void serialize(const std::string& fileName, const Config& config) {
-    std::ofstream file;
-    file.open(fileName, std::ios_base::out | std::ios_base::trunc);
-
-    for (const auto& kv : config) {
-        if (kv.first.empty()) {
-            std::cerr << "Cannot write: Section name should not be empty"
-                      << std::endl;
-            return;
-        }
-        file << "[" << kv.first << "]\n";
-
-        for (const auto& inner_kv : kv.second) {
-            file << inner_kv.first << " = " << inner_kv.second << "\n";
-        }
-
-        file << "\n";
+void serializeOption(std::basic_ostream<char>& output, const Option& option) {
+    if (option.first.empty()) {
+        throw ini::SerializeError("Option name should not be empty");
     }
 
-    file.close();
+    output << option.first << " =";
+
+    if (!option.second.empty()) {
+        output << " " << option.second;
+    }
+
+    output << "\n";
+}
+
+void serializeSection(std::basic_ostream<char>& output,
+                      const Section& section) {
+    if (section.first.empty()) {
+        throw ini::SerializeError("Section name should not be empty");
+    }
+    output << "[" << section.first << "]\n";
+
+    for (const auto& option : section.second) {
+        serializeOption(output, option);
+    }
+
+    output << "\n";
+}
+
+void serialize(std::basic_ostream<char>& output, const Config& config) {
+    for (const auto& section : config) {
+        serializeSection(output, section);
+    }
+}
+
+void serialize(std::basic_ostream<char>& output, const Serializable& object) {
+    serialize(output, object.serialize());
 }
 
 }  // namespace ini

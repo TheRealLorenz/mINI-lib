@@ -1,70 +1,97 @@
-#include "deserialize.h"
+#include "ini/deserialize.h"
 
 #include <algorithm>
-#include <fstream>
-#include <iostream>
+#include <string>
 
-inline void rtrim(std::string& s) {
-    s.erase(std::find_if(s.rbegin(), s.rend(),
-                         [](char c) { return !std::isspace(c); })
-                .base(),
-            s.end());
-}
-
-inline void ltrim(std::string& s) {
-    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-                                    [](char c) { return !std::isspace(c); }));
-}
+#include "ini/Config.h"
+#include "ini/Deserializable.h"
+#include "ini/DeserializeError.h"
+#include "ini/EOFError.h"
+#include "utilstr/trim.h"
 
 namespace ini {
 
-void deserialize(const std::string& fileName, Deserializable& object) {
-    object.deserialize(deserialize(fileName));
+namespace stream {
+
+std::string getLine(std::basic_istream<char>& input) {
+    std::string buffer;
+    std::getline(input, buffer);
+
+    while (input) {
+        if (buffer.size() && buffer[0] != ';') {
+            return buffer;
+        }
+        std::getline(input, buffer);
+    }
+
+    throw EOFError();
 }
 
-Config deserialize(const std::string& fileName) {
-    std::ifstream file;
-    file.open(fileName, std::ios_base::in);
-    Config config;
+void putbackLine(std::basic_istream<char>& input, const std::string& line) {
+    input.putback('\n');
+    std::for_each(line.rbegin(), line.rend(),
+                  [&input](const char c) { input.putback(c); });
+}
 
-    std::string buffer;
-    std::getline(file, buffer);
-    while (file) {
-        if (!buffer.size() || buffer[0] == ';') {
-            std::getline(file, buffer);
-            continue;
-        }
+};  // namespace stream
 
-        if (buffer.size() < 3 || buffer[0] != '[' ||
-            buffer[buffer.size() - 1] != ']') {
-            std::cerr << "Cannot read: Invalid section name" << std::endl;
-            return config;
-        }
+Option deserializeOption(std::basic_istream<char>& input) {
+    std::string line = stream::getLine(input);
 
-        std::string sectionName = buffer.substr(1, buffer.size() - 2);
+    auto equal = std::find(line.begin(), line.end(), '=');
+    auto key = utilstr::rtrim(std::string(line.begin(), equal));
 
-        while (std::getline(file, buffer)) {
-            if (!buffer.size()) continue;
-            if (buffer[0] == '[') break;
-            auto equal = std::find(buffer.begin(), buffer.end(), '=');
+    if (equal == line.end() || equal == line.begin() || key.empty()) {
+        stream::putbackLine(input, line);
+        throw ini::DeserializeError(std::string("Invalid option '") + line +
+                                    "'");
+    }
 
-            if (equal == buffer.end() || equal == buffer.begin() ||
-                equal == buffer.end() - 1) {
-                std::cerr << "Cannot read: Invalid line" << std::endl;
-                return config;
-            }
+    auto value = utilstr::ltrim(std::string(equal + 1, line.end()));
 
-            auto key = std::string(buffer.begin(), equal);
-            auto value = std::string(equal + 1, buffer.end());
-            rtrim(key);
-            ltrim(value);
+    return {key, value};
+}
 
-            config[sectionName][key] = value;
+Section deserializeSection(std::basic_istream<char>& input) {
+    std::string line = stream::getLine(input);
+
+    if (line.size() < 3 || line[0] != '[' || line[line.size() - 1] != ']') {
+        throw ini::DeserializeError(std::string("Invalid section header '") +
+                                    line + "'");
+    }
+
+    std::string sectionName = line.substr(1, line.size() - 2);
+    Options options;
+
+    while (true) {
+        try {
+            Option option = deserializeOption(input);
+            options.insert(option);
+        } catch (const DeserializeError& e) {
+            break;
         }
     }
 
-    file.close();
+    return {sectionName, options};
+}
+
+Config deserialize(std::basic_istream<char>& input) {
+    Config config;
+
+    while (true) {
+        try {
+            Section section = deserializeSection(input);
+            config.insert(section);
+        } catch (const EOFError& e) {
+            break;
+        }
+    }
+
     return config;
+}
+
+void deserialize(std::basic_istream<char>& input, Deserializable& object) {
+    object.deserialize(deserialize(input));
 }
 
 }  // namespace ini

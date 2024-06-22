@@ -1,8 +1,9 @@
+#include <fstream>
 #include <iostream>
 
-#include "src/Config.h"
-#include "src/deserialize.h"
-#include "src/serialize.h"
+#include "ini/Config.h"
+#include "ini/deserialize.h"
+#include "ini/serialize.h"
 
 int main() {
     ini::Config config;
@@ -15,9 +16,15 @@ int main() {
         config[std::string() + char(i + 65)] = section;
     }
 
-    ini::serialize("prova.ini", config);
+    std::ofstream outputFile;
+    outputFile.open("prova.ini", std::ios_base::out | std::ios_base::trunc);
+    ini::serialize(outputFile, config);
+    outputFile.close();
 
-    config = ini::deserialize("prova.ini");
+    std::ifstream inputFile;
+    inputFile.open("prova.ini", std::ios_base::in);
+    config = ini::deserialize(inputFile);
+    inputFile.close();
 
     for (const auto& kv : config) {
         std::cout << "Section: " << kv.first << std::endl;
