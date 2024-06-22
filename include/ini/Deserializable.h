@@ -7,7 +7,7 @@ namespace ini {
 
 class Deserializable {
 public:
-    virtual void deserialize(const Config& config) = 0;
+    virtual void deserialize(Config& config) = 0;
     virtual ~Deserializable() {}
 };
 

@@ -11,7 +11,7 @@ mINI-lib is a dead simple library for INI format handling in C++.
 
 This types are simple `typdef`s which reduce code verbosity.
 
-## Usage
+## Basic Usage
 
 There are two main functions:
 
@@ -19,6 +19,20 @@ There are two main functions:
 - `ini::Config ini::deserialize(std::basic_istream<char>& input)`: deserializes a Config object to the given input stream.
 
 Using `std::basic_istream<char>` and `std::basic_ostream<char>` Gives more flexibility, as the (de)serialization may occur (from)to `std::fstream`s and `std::stringstream`s, for example.
+
+## Interfaces
+
+This library may also be used in combination with C++'s inheritance.
+
+A class may derive from:
+
+- `ini::Serializable`: the class must implement the `ini::Config serialize()` method.
+- `ini::Deserializable`: the class must implement the `void deserialize(Config& config)` method.
+
+Then you can serialize and deserialize object with the specialzed methods:
+
+- `void ini::serialize(std::basic_ostream<char>& output, const ini::Serializable& object);`.
+- `void ini::deserialize(std::basic_istream<char>& input, ini::Deserializable& object);`.
 
 ## Exceptions
 
