@@ -91,7 +91,9 @@ Config deserialize(std::basic_istream<char>& input) {
 }
 
 void deserialize(std::basic_istream<char>& input, Deserializable& object) {
-    object.deserialize(deserialize(input));
+    Config config = deserialize(input);
+
+    object.deserialize(config);
 }
 
 }  // namespace ini
