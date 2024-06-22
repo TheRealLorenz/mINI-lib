@@ -10,6 +10,8 @@
 
 namespace ini {
 
+namespace stream {
+
 std::string getLine(std::basic_istream<char>& input) {
     std::string buffer;
     std::getline(input, buffer);
@@ -30,26 +32,27 @@ void putbackLine(std::basic_istream<char>& input, const std::string& line) {
                   [&input](const char c) { input.putback(c); });
 }
 
-Option parseOption(std::basic_istream<char>& input) {
-    std::string line = getLine(input);
+};  // namespace stream
+
+Option deserializeOption(std::basic_istream<char>& input) {
+    std::string line = stream::getLine(input);
 
     auto equal = std::find(line.begin(), line.end(), '=');
+    auto key = utilstr::rtrim(std::string(line.begin(), equal));
 
-    if (equal == line.end() || equal == line.begin() ||
-        equal == line.end() - 1) {
-        putbackLine(input, line);
+    if (equal == line.end() || equal == line.begin() || key.empty()) {
+        stream::putbackLine(input, line);
         throw ini::DeserializeError(std::string("Invalid option '") + line +
                                     "'");
     }
 
-    auto key = utilstr::rtrim(std::string(line.begin(), equal));
     auto value = utilstr::ltrim(std::string(equal + 1, line.end()));
 
     return {key, value};
 }
 
-Section parseSection(std::basic_istream<char>& input) {
-    std::string line = getLine(input);
+Section deserializeSection(std::basic_istream<char>& input) {
+    std::string line = stream::getLine(input);
 
     if (line.size() < 3 || line[0] != '[' || line[line.size() - 1] != ']') {
         throw ini::DeserializeError(std::string("Invalid section header '") +
@@ -61,7 +64,7 @@ Section parseSection(std::basic_istream<char>& input) {
 
     while (true) {
         try {
-            Option option = parseOption(input);
+            Option option = deserializeOption(input);
             options.insert(option);
         } catch (const DeserializeError& e) {
             break;
@@ -76,7 +79,7 @@ Config deserialize(std::basic_istream<char>& input) {
 
     while (true) {
         try {
-            Section section = parseSection(input);
+            Section section = deserializeSection(input);
             config.insert(section);
         } catch (const EOFError& e) {
             break;

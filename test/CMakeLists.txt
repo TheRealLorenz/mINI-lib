@@ -22,7 +22,8 @@ add_executable(runAllTests
   testDeserialize.cpp
   testSerialize.cpp
   testSplit.cpp
-  testTrim.cpp)
+  testTrim.cpp
+  testUtils.cpp)
 
 target_link_libraries(runAllTests gtest_main mINI_static)
 gtest_discover_tests(runAllTests)

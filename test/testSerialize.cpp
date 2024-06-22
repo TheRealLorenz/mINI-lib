@@ -2,8 +2,56 @@
 
 #include <sstream>
 
+#include "ini/SerializeError.h"
 #include "ini/serialize.h"
 #include "utilstr/split.h"
+
+TEST(serializeOption, serializeFullOption) {
+    std::stringstream output;
+    ini::serializeOption(output, {"FOO", "BAR"});
+
+    ASSERT_EQ(output.str(), "FOO = BAR\n");
+}
+
+TEST(serializeOption, serializeEmptyOption) {
+    std::stringstream output;
+    ini::serializeOption(output, {"FOO", ""});
+
+    ASSERT_EQ(output.str(), "FOO =\n");
+}
+
+TEST(serializeOption, serializeInvalidOption) {
+    std::stringstream output;
+
+    ASSERT_THROW(ini::serializeOption(output, {"", "BAR"}),
+                 ini::SerializeError);
+}
+
+TEST(serializeSection, serializeFullSection) {
+    std::stringstream output;
+    ini::Options options;
+    options.insert({"FOO", "BAR"});
+    options.insert({"BAZ", ""});
+    ini::serializeSection(output, {"section1", options});
+
+    ASSERT_EQ(output.str(), "[section1]\nBAZ =\nFOO = BAR\n\n");
+}
+
+TEST(serializeSection, serializeEmptySection) {
+    std::stringstream output;
+    ini::Options options;
+    ini::serializeSection(output, {"section1", options});
+
+    ASSERT_EQ(output.str(), "[section1]\n\n");
+}
+
+TEST(serializeSection, serializeInvalidSection) {
+    std::stringstream output;
+    ini::Options options;
+
+    ASSERT_THROW(ini::serializeSection(output, {"", options}),
+                 ini::SerializeError);
+}
 
 TEST(serialize, serializeFile) {
     ini::Config config;

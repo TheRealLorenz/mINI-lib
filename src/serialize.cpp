@@ -5,14 +5,23 @@
 namespace ini {
 
 void serializeOption(std::basic_ostream<char>& output, const Option& option) {
-    output << option.first << " = " << option.second << "\n";
+    if (option.first.empty()) {
+        throw ini::SerializeError("Option name should not be empty");
+    }
+
+    output << option.first << " =";
+
+    if (!option.second.empty()) {
+        output << " " << option.second;
+    }
+
+    output << "\n";
 }
 
 void serializeSection(std::basic_ostream<char>& output,
                       const Section& section) {
     if (section.first.empty()) {
-        throw ini::SerializeError(
-            "Couldn't serialize: Section name should not be empty");
+        throw ini::SerializeError("Section name should not be empty");
     }
     output << "[" << section.first << "]\n";
 
