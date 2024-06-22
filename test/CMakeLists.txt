@@ -20,7 +20,9 @@ include(GoogleTest)
 add_executable(runAllTests
   runAllTests.cpp
   testDeserialize.cpp
+  testDeserializable.cpp
   testSerialize.cpp
+  testSerializable.cpp
   testSplit.cpp
   testTrim.cpp
   testUtils.cpp)
